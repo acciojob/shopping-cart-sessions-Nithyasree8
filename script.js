@@ -38,9 +38,9 @@ function renderProducts() {
 // Render cart list
 function renderCart() {
   cartList.innerHTML = "";
-  cart.forEach((item) => {
+  cart.forEach((itemId) => {
+    const product = products.find((p) => (link unavailable) === itemId);
     const li = document.createElement("li");
-    const product = products.find((p) => (link unavailable) === (link unavailable));
     li.innerHTML = `${product.name} - $${product.price}`;
     cartList.appendChild(li);
   });
