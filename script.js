@@ -40,16 +40,12 @@ function addToCart(productId) {
 
     if (productToAdd) {
         let cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
-        // Prevent adding duplicate products
-        const existingProduct = cartItems.find(item => item.id === productToAdd.id);
-        if (!existingProduct) {
-            cartItems.push(productToAdd);
-            sessionStorage.setItem("cart", JSON.stringify(cartItems));
-            renderCart();
-        }
+        // Add product regardless of whether it already exists in the cart
+        cartItems.push(productToAdd);
+        sessionStorage.setItem("cart", JSON.stringify(cartItems));
+        renderCart();
     }
 }
-
 // Function to clear the cart
 function clearCart() {
     sessionStorage.removeItem("cart");
