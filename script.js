@@ -25,11 +25,8 @@ function renderProducts() {
 // Function to render the shopping cart
 function renderCart() {
     cartList.innerHTML = ""; // Clear existing list
+    const cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
 
-    // Retrieve cart items from session storage
-    let cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    // Populate cart with items
     cartItems.forEach((item) => {
         const li = document.createElement("li");
         li.textContent = `${item.name} - $${item.price}`;
@@ -43,9 +40,12 @@ function addToCart(productId) {
 
     if (productToAdd) {
         let cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
-        cartItems.push(productToAdd);
-        sessionStorage.setItem("cart", JSON.stringify(cartItems));
-        renderCart();
+        const existingProduct = cartItems.find(item => item.id === productToAdd.id);
+        if (!existingProduct) {
+            cartItems.push(productToAdd);
+            sessionStorage.setItem("cart", JSON.stringify(cartItems));
+            renderCart();
+        }
     }
 }
 
