@@ -9,11 +9,15 @@ const products = [
     { id: 5, name: "Product 5", price: 50 },
 ];
 
+// DOM elements
 const productList = document.getElementById("product-list");
 const cartList = document.getElementById("cart-list");
 const clearCartBtn = document.getElementById("clear-cart-btn");
 
-// Function to render the list of products
+// Load cart from session storage
+let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+
+// Render product list
 function renderProducts() {
     products.forEach((product) => {
         const li = document.createElement("li");
@@ -22,37 +26,34 @@ function renderProducts() {
     });
 }
 
-// Function to render the shopping cart
+// Render cart list
 function renderCart() {
-    cartList.innerHTML = ""; // Clear existing list
-    const cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
-
-    cartItems.forEach((item) => {
+    cartList.innerHTML = ""; // Clear the current cart display
+    cart.forEach((item) => {
         const li = document.createElement("li");
-        li.textContent = `${item.name} - $${item.price}`;
+        li.innerText = `${item.name} - $${item.price}`;
         cartList.appendChild(li);
     });
 }
 
-// Function to add an item to the cart
+// Add item to cart
 function addToCart(productId) {
-    const productToAdd = products.find((product) => product.id === productId);
-
-    if (productToAdd) {
-        let cartItems = JSON.parse(sessionStorage.getItem("cart")) || [];
-        // Add product regardless of whether it already exists in the cart
-        cartItems.push(productToAdd);
-        sessionStorage.setItem("cart", JSON.stringify(cartItems));
-        renderCart();
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+        cart.push(product);
+        sessionStorage.setItem("cart", JSON.stringify(cart)); // Update session storage
+        renderCart(); // Update the cart display
     }
 }
-// Function to clear the cart
+
+// Clear cart
 function clearCart() {
-    sessionStorage.removeItem("cart");
-    renderCart();
+    cart = []; // Reset the cart
+    sessionStorage.removeItem("cart"); // Remove from session storage
+    renderCart(); // Update the cart display
 }
 
-// Event listener for adding to cart
+// Event listener for adding products to the cart
 productList.addEventListener("click", (event) => {
     if (event.target.classList.contains("add-to-cart-btn")) {
         const productId = parseInt(event.target.getAttribute("data-id"));
